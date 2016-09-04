@@ -1,8 +1,5 @@
 import org.newdawn.slick.*;
-import org.newdawn.slick.geom.Circle;
-import org.newdawn.slick.geom.Line;
-import org.newdawn.slick.geom.Polygon;
-import org.newdawn.slick.geom.Vector2f;
+import org.newdawn.slick.geom.*;
 
 /**
  * Created by anton on 27/04/2016.
@@ -47,13 +44,13 @@ public class Main extends BasicGame {
 
     @Override
     public void update(GameContainer gameContainer, int delta) throws SlickException {
-        Vector2f mouseVector = new Vector2f(input.getMouseX(), input.getMouseY());
+        Vector2f mousePositionVector = new Vector2f(input.getMouseX(), input.getMouseY());
         for(int i = 0; i < rays.length; i++) {
             double angle = i * 4;
-            Vector2f dest = new Vector2f(700, 0);
-            dest.setTheta(angle);
-            dest.add(mouseVector);
-            rays[i].set(mouseVector, dest);
+            Vector2f destinationVector = new Vector2f(700, 0);
+            destinationVector.setTheta(angle);
+            destinationVector.add(mousePositionVector);
+            rays[i].set(mousePositionVector, destinationVector);
         }
     }
 
@@ -61,6 +58,7 @@ public class Main extends BasicGame {
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
         for(Polygon p : obstacles){
             graphics.draw(p);
+            getLines(p);
         }
         for(Line l : rays){
             for(Polygon p : obstacles){
@@ -76,5 +74,14 @@ public class Main extends BasicGame {
         graphics.fill(mouseCircle);
         graphics.draw(mouseCircle);
 
+    }
+
+    public Line[] getLines(Shape shapeToCheck){
+        Line[] arrayOfLines;
+
+        for(int i = 0; i < shapeToCheck.getPointCount(); i ++){
+            float[] fom = shapeToCheck.getPoint(i);
+        }
+        return null;
     }
 }
