@@ -1,15 +1,18 @@
+import javafx.print.Collation;
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.*;
 
-/**
- * Created by anton on 27/04/2016.
- */
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+
 public class Main extends BasicGame {
 
     Input input;
     Polygon[] obstacles;
     Circle mouseCircle;
     Line[] rays;
+    ArrayList<Line> shapeLines;
 
     public static void main(String[] args) {
         try{
@@ -40,6 +43,13 @@ public class Main extends BasicGame {
         for(int i = 0; i < rays.length; i++){
             rays[i] = new Line(0,0,0,0);
         }
+
+        shapeLines = new ArrayList<>();
+        for(Polygon polygon : obstacles){
+            for(Line shapeLine : getLinesFromShape(polygon)){
+                shapeLines.add(shapeLine);
+            }
+        }
     }
 
     @Override
@@ -58,15 +68,12 @@ public class Main extends BasicGame {
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
         for(Polygon p : obstacles){
             graphics.draw(p);
-            getLines(p);
         }
-        for(Line l : rays){
-            for(Polygon p : obstacles){
-                if(l.intersects(p)){
-                    graphics.draw(l);
-                }
-            }
+        for(Line line : shapeLines){
+            graphics.draw(line);
         }
+
+
 //        for(Line l : rays){
 //            graphics.draw(l);
 //        }
@@ -76,12 +83,14 @@ public class Main extends BasicGame {
 
     }
 
-    public Line[] getLines(Shape shapeToCheck){
-        Line[] arrayOfLines;
+    public ArrayList<Line> getLinesFromShape(Shape shapeToCheck){
+        ArrayList<Line> lineList = new ArrayList<>();
+        ArrayList<Vector2f> vectorLineList = new ArrayList<>();
+        float[] pointsFromShape = shapeToCheck.getPoints();
 
-        for(int i = 0; i < shapeToCheck.getPointCount(); i ++){
-            float[] fom = shapeToCheck.getPoint(i);
+        for(int i = 0; i < shapeToCheck.getPointCount() * 2; i +=2 ){
+            lineList.add(new Line(pointsFromShape[i], pointsFromShape[i+1]));
         }
-        return null;
+        return lineList;
     }
 }
